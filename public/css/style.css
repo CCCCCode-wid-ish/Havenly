@@ -1,0 +1,144 @@
+.body {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1;
+}
+
+.navbar {
+    height: 5rem;
+
+}
+
+.fa-compass {
+    color: blue;
+    font-size: 2rem;
+}
+
+.navlink {
+    color: brown !important;
+    /*
+    for overriding the bootstrap color 
+    */
+
+}
+
+.f-info-link a {
+    text-decoration: none;
+    color: blueviolet;
+
+
+}
+
+.f-info-link a:hover {
+    text-decoration: underline;
+
+}
+
+.f-info {
+    height: 7rem;
+    background-color: whitesmoke;
+    display: flex;
+    flex-wrap: wrap;
+    /*
+          to add them in a separate line  
+            */
+    justify-content: center;
+
+    align-items: space-evenly;
+    text-align: center;
+
+}
+
+.f-info-link,
+.f-info-socials {
+    width: 100%;
+    font-size: 1.2rem;
+    margin-right: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.f-info-socials i {
+    font-size: 1.2rem;
+    margin-right: 1rem;
+
+}
+
+/*
+cards
+*/
+.listing-card {
+    border: none !important;
+    margin-bottom: 2rem;
+
+}
+
+.card-img-top {
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body {
+    padding: 0% !important;
+}
+
+.card-img-overlay {
+    opacity: 0;
+
+}
+
+.card-img-overlay:hover {
+    opacity: 0.5;
+    background-color: white;
+
+}
+
+/* New page*/
+.add-btn {
+    background-color: red !important;
+    border: none;
+}
+
+/* Edit page*/
+
+.edit-btn {
+    background-color: red;
+
+}
+
+/* Show page */
+
+.show-img {
+    height: 30vh;
+
+
+}
+
+/* Review Card Styling */
+.review-card {
+    border: 1px solid #ddd !important;
+    /* Thin grey border */
+    border-radius: 0.5rem !important;
+    /* Slightly rounded corners */
+    padding: 0.5rem;
+    box-shadow: none;
+    /* Keep it flat like the image */
+}
+
+.review-card .card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.review-card .card-text {
+    font-size: 0.95rem;
+    color: #222;
+}
