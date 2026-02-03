@@ -11,13 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "connect": "^3.7.0",
+    "connect-flash": "^0.1.1",
     "ejs": "^4.0.1",
     "ejs-mate": "^4.0.0",
     "express": "^5.2.1",
     "express-joi-validation": "^6.1.0",
     "express-session": "^1.19.0",
     "flash": "^1.1.0",
-    "joi": "^18.0.2",
+    "joi": "^17.13.3",
     "method": "^2.0.0",
     "method-override": "^3.0.0",
     "mongoose": "^9.1.4"

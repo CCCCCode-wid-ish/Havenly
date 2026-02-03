@@ -14,11 +14,12 @@ const session = require("express-session")
 
 const listings = require("./routes/listing")
 const reviews = require("./routes/reviews")
+const flash = require("connect-flash");
 
 
 const { listingSchema, reviewSchema } = require("./schema.js");
 
-const flashConnect = require("flash connect")
+
 
 
 
@@ -63,20 +64,22 @@ const sessionOptions = {
 app.get("/", (req, res) => {
   res.send("hi i am root");
 });
-app.use(flash()); //use before routes
-
-
+// session FIRST
 app.use(session(sessionOptions));
-app.use("/listings", listings);
-app.use("/listings/:id/reviews" , reviews)   //Parent route
 
+// then flash
+app.use(flash());
 
+// then locals (BEFORE routes)
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
 
+// THEN routes
+app.use("/listings", listings);
+app.use("/listings/:id/reviews", reviews);
 
 
 
