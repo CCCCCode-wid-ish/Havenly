@@ -96,6 +96,7 @@ router.put("/:id", validateListing,
   await Listing.findByIdAndUpdate(id, req.body.listing, {
     runValidators: true,
   });
+      
       req.flash("success", "Lisitng is updated");
 
   res.redirect(`/listings/${id}`);
