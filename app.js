@@ -51,14 +51,12 @@ const sessionOptions = {
   saveUninitialized: true,
 
   cookie: {
-    httpOnly: true, //for cross setting
-    secure: false, // true only if HTTPS
-    cookie: {
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      
-    },
-  }, // true only if using HTTPS
+  httpOnly: true,
+  secure: false,
+  expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+},
+
 };
 
 app.get("/", (req, res) => {
