@@ -71,6 +71,7 @@ app.use(flash());
 // then locals (BEFORE routes)
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
+  console.log(res.locals.success);
   res.locals.error = req.flash("error");
   next();
 });
