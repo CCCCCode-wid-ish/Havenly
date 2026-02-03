@@ -23,9 +23,10 @@
     <%- include('../includes/navbar.ejs') %>
 
     <div class="container">
-        
-        <!--Including the flash file-->
-          <%- include('../includes/flash.ejs') %>
+
+        <!--Including the flash success and error messages-->
+          <%- include('../includes/successflash.ejs') %>
+                    <%- include('../includes/errorflash.ejs') %>
         <%- body %>
     </div>
 

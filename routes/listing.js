@@ -39,8 +39,9 @@ router.get('/:id',wrapAsync ( async (req, res) => {
     let {id} = req.params; //extracting id 
   const listing = await Listing.findById(id).populate("reviews");
   if (!listing) {
-    req.flash("error", "listing requested by you doesnot existing ")
-    res.redirect("/listings");
+    req.flash("error", "listing requested by you doesnot existing ");
+
+    return res.redirect("/listings"); //  return prevents double response
   }
     res.render("listings/show" ,{listing});
 })
@@ -80,7 +81,12 @@ router.post("", validateListing,
 router.get("/:id/edit", wrapAsync(async (req, res) => {
     
      let {id} = req.params; //extracting id 
-    const listing = await Listing.findById(id);
+  const listing = await Listing.findById(id);
+  if (!listing) {
+    req.flash("error", "listing requested by you doesnot existing ");
+
+    return res.redirect("/listings"); //  return prevents double response
+  }
     res.render("listings/edit" , {listing})
 })
 )
@@ -101,7 +107,7 @@ router.put("/:id", validateListing,
     runValidators: true,
   });
       
-      req.flash("success", "Lisitng is updated");
+      req.flash("success", "Listing is updated");
 
   res.redirect(`/listings/${id}`);
 })
@@ -117,7 +123,7 @@ router.delete(
     console.log(deletedListing);
 
     req.flash("success", "Listing Deleted!");
-    res.redirect("/listings");
+    return res.redirect("/listings"); //return added
   })
 );
 

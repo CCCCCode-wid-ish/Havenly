@@ -71,7 +71,7 @@ app.use(flash());
 // then locals (BEFORE routes)
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
-  console.log(res.locals.success);
+  
   res.locals.error = req.flash("error");
   next();
 });
@@ -81,7 +81,7 @@ app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
 
 
-
+//404 HANDLER
 app.use((req, res, next) => {
 next(new ExpressError("Page Not Found", 404));
 
@@ -95,7 +95,18 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render("error",{message});
     
 })
+ // GLOBAL ERROR HANDLER (FIXED)
+// ======================
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message = "Something went wrong" } = err;
 
+  // 🔥 PREVENTS HEADERS ERROR
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(statusCode).render("error", { message });
+});
 
 app.listen(port, () => {
     console.log("Server is listening to the port");
