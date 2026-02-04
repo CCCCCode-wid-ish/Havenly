@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
-import { required } from 'joi';
-import passportLocalMongoose from './../node_modules/passport-local-mongoose/dist/index.d';
+
 const Schema = mongoose.Schema;
 
 
-const passportLocalMongoose = require("passport-local-mongoose");
+const passportLocalMongoose = require("passport-local-mongoose").default;
 
 const userSchema = new Schema({
     email: {
@@ -16,6 +15,6 @@ const userSchema = new Schema({
 })
 
 
-User.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose);
 //Automatically implement hash and salt field , username
 module.exports = mongoose.model('User', userSchema);

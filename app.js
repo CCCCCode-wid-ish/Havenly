@@ -101,7 +101,10 @@ passport.use(new LocalStratergy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 // serializeUser() Generates a function that is used by Passport to serialize users into the session : storing the info
-// deserializeUser() Generates a function that is used by Passport to deserialize users into the session : unstore 
+// deserializeUser() Generates a function that is used by Passport to deserialize users into the session : unstore
+
+
+
 
 
 // then locals (BEFORE routes)
@@ -112,6 +115,17 @@ app.use((req, res, next) => {
   next();
 });
 
+
+//DemoUser
+app.get("/demouser", async (req, res) => {
+  let fakeUser = new User({
+    email: "student@gmail.com",
+    username : "delta-student"
+  })
+  let registerdUser = await User.register(fakeUser, "helloworld") // static method
+  res.send(registerdUser);
+  
+})
 // THEN routes
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
