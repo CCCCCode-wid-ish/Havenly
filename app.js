@@ -15,7 +15,11 @@ const session = require("express-session")
 const listings = require("./routes/listing")
 const reviews = require("./routes/reviews")
 const flash = require("connect-flash");
+//Passport
 
+const passport = require("passport");
+const LocalStratergy = require("passport-local")
+const User = require("./models/user.js")
 
 const { listingSchema, reviewSchema } = require("./schema.js");
 
