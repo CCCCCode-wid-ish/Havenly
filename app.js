@@ -73,6 +73,8 @@ app.use(session(sessionOptions));
 app.use(flash());
 
 //Implementing the passport
+
+
 //We need the session to implement the passport
 //to implement Local  Stratergy
 //User in one session login credentials shld be comman
@@ -81,7 +83,26 @@ app.use(flash());
  //So passport uses the session 
 
 app.use(passport.initialize())
- 
+//A middleware that initializes passport 
+
+app.use(passport.session())
+//A web application needs a aability to identify
+//user as they browse frm page to page
+//this series of requests and responses , each associated with the same user is known as session 
+
+passport.use(new LocalStratergy(User.authenticate()));
+//inside the passport we created the local stratergy
+//Our user , the req ,they have to be authenticated from the localStratergy
+//And to authenticate that user we use the method authenticate
+//Authentication means making the user to  sigining up , login the user
+//It is the static method added by default by passport - mongoose
+
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+// serializeUser() Generates a function that is used by Passport to serialize users into the session : storing the info
+// deserializeUser() Generates a function that is used by Passport to deserialize users into the session : unstore 
+
 
 // then locals (BEFORE routes)
 app.use((req, res, next) => {
