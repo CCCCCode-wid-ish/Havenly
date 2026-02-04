@@ -72,6 +72,17 @@ app.use(session(sessionOptions));
 // then flash
 app.use(flash());
 
+//Implementing the passport
+//We need the session to implement the passport
+//to implement Local  Stratergy
+//User in one session login credentials shld be comman
+//If they are using the different tabs of the same website than the credential shld be same 
+//so their is one  session  : we known the sesion is of the individual user 
+ //So passport uses the session 
+
+app.use(passport.initialize())
+ 
+
 // then locals (BEFORE routes)
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
