@@ -12,14 +12,16 @@ const ExpressError = require("./utils/ExpressError")
 
 const session = require("express-session")
 
-const listings = require("./routes/listing")
-const reviews = require("./routes/reviews")
+const listingRouter = require("./routes/listing")
+const reviewRouter = require("./routes/reviews")
 const flash = require("connect-flash");
 //Passport
 
 const passport = require("passport");
 const LocalStratergy = require("passport-local")
 const User = require("./models/user.js")
+
+const UserRouter = require("./routes/user.js")
 
 const { listingSchema, reviewSchema } = require("./schema.js");
 
@@ -127,9 +129,9 @@ app.get("/demouser", async (req, res) => {
   
 })
 // THEN routes
-app.use("/listings", listings);
-app.use("/listings/:id/reviews", reviews);
-
+app.use("/listings", listingRouter);
+app.use("/listings/:id/reviews", reviewRouter);
+app.use("/", UserRouter);
 
 //404 HANDLER
 app.use((req, res, next) => {
