@@ -17,4 +17,4 @@ const userSchema = new Schema({
 
 userSchema.plugin(passportLocalMongoose);
 //Automatically implement hash and salt field , username
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

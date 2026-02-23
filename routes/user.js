@@ -3,6 +3,7 @@ const router = express.Router();
 //Before calling the new user require the models 
 const User = require("../models/user")
 const wrapAsync = require("../utils/wrapAsync");
+const passport = require("passport");
 router.get("/signup", (req, res) => {
     res.render("users/signup");
 })
@@ -15,9 +16,9 @@ router.post("/signup", async (req, res) => {
         //Create the new user 
         const newUser = new User({ email, username })
         //Registering the new user
-        const registerdUser = await User.register((newUser, password));
+        const registerdUser = await User.register(newUser, password);
         console.log(registerdUser);
-        res.flash('success', "Welcome to havenly")
+        req.flash('success', "Welcome to havenly")
         res.redirect("/listings");
     } catch (e) {
         req.flash("error", e.message);
@@ -32,5 +33,13 @@ router.post("/signup", async (req, res) => {
 router.get("/login", (req, res) => {
     res.render("users/login");
 })
+
+router.post("/login", passport.authenticate("local", { failureRedirect: '/login', failureFlash: true })
+    , async (req, res) => {
+        req.flash("success", "Welcome to WanderLust! You are logged in!")
+        res.redirect("/listings");
+    
+})
+//Used for authentication 
 
 module.exports = router;

@@ -29,7 +29,9 @@ router.get('', async(req, res) => {
 
 
 //NEW route  
-router.get("/new",(req,res) =>{
+router.get("/new", (req, res) => {
+  console.log(req.user);
+ 
 res.render("listings/new")
 })
 
