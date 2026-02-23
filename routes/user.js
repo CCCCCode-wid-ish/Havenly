@@ -19,10 +19,18 @@ router.post("/signup", async (req, res) => {
         console.log(registerdUser);
         res.flash('success', "Welcome to havenly")
         res.redirect("/listings");
-    } catch(e) {
+    } catch (e) {
+        req.flash("error", e.message);
+        res.redirect("/signup");
         
     }
     
+})
+
+
+
+router.get("/login", (req, res) => {
+    res.render("users/login");
 })
 
 module.exports = router;
