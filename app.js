@@ -118,16 +118,16 @@ app.use((req, res, next) => {
 });
 
 
-//DemoUser
-app.get("/demouser", async (req, res) => {
-  let fakeUser = new User({
-    email: "student@gmail.com",
-    username : "delta-student"
-  })
-  let registerdUser = await User.register(fakeUser, "helloworld") // static method
-  res.send(registerdUser);
+// //DemoUser
+// app.get("/demouser", async (req, res) => {
+//   let fakeUser = new User({
+//     email: "student@gmail.com",
+//     username : "delta-student"
+//   })
+//   let registerdUser = await User.register(fakeUser, "helloworld") // static method
+//   res.send(registerdUser);
   
-})
+// })
 // THEN routes
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
