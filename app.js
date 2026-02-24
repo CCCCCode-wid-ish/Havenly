@@ -116,8 +116,8 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   //Cannot require the req.user directly in navbar file
   //so requiring here
-  res.locals.curruser = req.user;
-  next();
+  res.locals.currUser = req.user;
+  
   
   next();
 });

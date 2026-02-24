@@ -16,10 +16,20 @@ router.post("/signup", async (req, res) => {
         //Create the new user 
         const newUser = new User({ email, username })
         //Registering the new user
-        const registerdUser = await User.register(newUser, password);
-        console.log(registerdUser);
-        req.flash('success', "Welcome to havenly")
-        res.redirect("/listings");
+        const registeredUser = await User.register(newUser, password);
+        console.log(registeredUser);
+
+
+        //For automatically loggedIn after sign up
+        req.login(registeredUser, (err) => {
+            if (err) {
+                return next(err);
+            }
+              req.flash("success", "Welcome to havenly");
+              res.redirect("/listings");
+
+        })
+     
     } catch (e) {
         req.flash("error", e.message);
         res.redirect("/signup");
@@ -34,12 +44,13 @@ router.get("/login", (req, res) => {
     res.render("users/login");
 })
 
-router.post("/login", passport.authenticate("local", { failureRedirect: '/login', failureFlash: true })
-    , async (req, res) => {
-        req.flash("success", "Welcome to WanderLust! You are logged in!")
-        res.redirect("/listings");
-    
-})
+// ✅ Correct - add successRedirect inside passport.authenticate
+router.post("/login", passport.authenticate("local", { 
+    failureRedirect: '/login', 
+    failureFlash: true,
+    successRedirect: '/listings',  // ✅ handle redirect here
+    successFlash: "Welcome to WanderLust! You are logged in!" // ✅ flash here
+}));
 //Used for authentication
 
 
