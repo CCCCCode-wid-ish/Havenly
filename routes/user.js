@@ -4,6 +4,10 @@ const router = express.Router();
 const User = require("../models/user")
 const wrapAsync = require("../utils/wrapAsync");
 const passport = require("passport");
+const { saveRedirectUrl } = require("../middleware");
+
+
+
 router.get("/signup", (req, res) => {
     res.render("users/signup");
 })
@@ -26,7 +30,7 @@ router.post("/signup", async (req, res) => {
                 return next(err);
             }
               req.flash("success", "Welcome to havenly");
-              res.redirect("/listings");
+              res.redirect(req.session.redirectUrl); //using from middleware
 
         })
      
@@ -45,12 +49,22 @@ router.get("/login", (req, res) => {
 })
 
 // ✅ Correct - add successRedirect inside passport.authenticate
-router.post("/login", passport.authenticate("local", { 
-    failureRedirect: '/login', 
+router.post(
+  "/login",
+  saveRedirectUrl,
+  passport.authenticate("local", {
+    failureRedirect: "/login",
     failureFlash: true,
-    successRedirect: '/listings',  // ✅ handle redirect here
-    successFlash: "Welcome to WanderLust! You are logged in!" // ✅ flash here
-}));
+  }),
+  async (req, res) => {
+      req.flash("success", "Welcome to WanderLust! You are logged in!");
+      let redirectUrl = res.locals.redirectUrl || "/listings";
+    res.redirect(redirectUrl); // ✅ fallback route
+  },
+);
+//     successRedirect: '/listings',  // ✅ handle redirect here
+//     successFlash: "Welcome to WanderLust! You are logged in!" // ✅ flash here
+// }));
 //Used for authentication
 
 

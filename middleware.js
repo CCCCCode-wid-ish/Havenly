@@ -1,14 +1,31 @@
 module.exports.isLoggedIn = (req, res, next) => {
-    console.log(req.path, "..");
-    if (!req.isAuthenticated()) {
+  //console.log(req.path, "..",req.originalUrl); //path -> trying to access ,originalurl: complete url trying to access
+  //Saving redirected url
+  
+  if (!req.isAuthenticated()) {
+    req.session.redirectUrl = req.originalUrl;
       req.flash("error", "you must be logged in to create listings!");
         return res.redirect("/login");
         
 
 
 
-    }
+  }
+  next();
 }
 
+/*
+when the user logged in in our platform the url which they were 
+trying to access the path they have to login the platform is asking for login 
+so after successfully loggedin the user comes back to the 
+path which ever they were trying to access 
+*/
 
+
+module.exports.saveRedirectUrl = (req, res, next) => {
+  if (req.session.redirectUrl) {
+    res.locals.redirectUrl = req.session.redirectUrl;
+  }
+  next();
+}
 
