@@ -31,7 +31,11 @@ const listingSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref : "Review"
     }
-  ]
+  ],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref : "User",
+  }
 });
 
 //we have two logic for images
