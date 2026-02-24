@@ -29,10 +29,10 @@ router.get('', async(req, res) => {
 
 
 //NEW route  
-router.get("/new", (req, res) => {
- 
- 
-res.render("listings/new")
+router.get("/new", isLoggedIn, (req, res) => {
+  console.log(req.user)
+  res.render("listings/new")
+
 })
 
 
@@ -80,7 +80,7 @@ router.post("", validateListing,
     
 //Edit route
 
-router.get("/:id/edit", wrapAsync(async (req, res) => {
+router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res) => {
     
      let {id} = req.params; //extracting id 
   const listing = await Listing.findById(id);
@@ -94,7 +94,7 @@ router.get("/:id/edit", wrapAsync(async (req, res) => {
 )
 
 //Update Route
-router.put("/:id", validateListing,
+router.put("/:id", validateListing,isLoggedIn,
     wrapAsync(async (req, res) => {
   const { id } = req.params;
 
@@ -117,7 +117,7 @@ router.put("/:id", validateListing,
 
 // Delete Route
 router.delete(
-  "/:id",
+  "/:id",isLoggedIn,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
 

@@ -12,6 +12,18 @@
         <a class="nav-link" href="/listings/new">New Listings</a>
        
       </div>
+     
+         <div class="navbar-nav ms-auto">
+          <% if(!req.user) { %>
+        <a class="nav-link "  href="/signup">Sign Up</a>
+        <a class="nav-link" href="/login">Login in</a>
+          <%  } %>
+            <% if(!req.user) { %>
+        <a class="nav-link" href="/logout">Log out</a>
+          <%  } %>
+       
+    
+      </div>
     </div>
   </div>
 </nav>
