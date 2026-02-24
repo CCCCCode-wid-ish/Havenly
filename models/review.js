@@ -1,4 +1,3 @@
-const { number } = require("joi");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -11,8 +10,12 @@ const reviewSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(), //if any date is not set by
-    //defalt the date added
+    default: Date.now, // ✅ remove () — Date.now() runs once at startup
+  },
+  author: {
+    // ✅ ADD THIS
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
 });
 

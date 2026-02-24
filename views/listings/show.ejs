@@ -21,6 +21,10 @@
         </p>
 
         <p class="card-text">
+          <% if (listing.owner) { %>
+  <p><strong>Posted by:</strong> @<%= listing.owner.username %></p>
+<% } %>
+
           <strong>Location:</strong> 
           <%= listing.location %>, 
           <%= listing.country %>
@@ -91,7 +95,9 @@
     <div class="col">
       <div class="card review-card mb-3">
         <div class="card-body">
-          <h5 class="card-title">Jane Doe</h5> 
+          <h5 class="card-title">          
+          @<%= review.author ? review.author.username : "Anonymous" %>  <!-- ✅ replace Jane Doe with this -->
+        </h5>
           <p class="card-text"><%= review.comment %></p>
           <p class="card-text"><%= review.rating %> Stars</p>
         
@@ -100,6 +106,7 @@
   action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" 
   class="mb-3"
 >
+
 <button class="btn btn-sm btn-dark">Delete</button>
         </form>
         </div>

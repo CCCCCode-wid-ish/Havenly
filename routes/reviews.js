@@ -5,6 +5,7 @@ const { listingSchema, reviewSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError");
 const Listing = require("../models/listing.js");
 const Review = require("../models/review.js");
+const { isLoggedIn } = require("../middleware.js"); // ✅ add this
 const router = express.Router({mergeParams : true})
 
 
@@ -40,22 +41,23 @@ router.delete("/:reviewId", wrapAsync(async (req, res) => {
 //Post Route
 
 router.post(
-    "/",
-    validateReview,
-    wrapAsync(async (req, res) => {
-        let listing = await Listing.findById(req.params.id);
-        let newReview = new Review(req.body.review);
+  "/",
+  isLoggedIn,
+  validateReview,
+  wrapAsync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
 
-        listing.reviews.push(newReview);
+    listing.reviews.push(newReview);
 
-        await newReview.save();
-        await listing.save();
+    await newReview.save();
+    await listing.save();
 
-      console.log("new review saved");
-      req.flash("success" , "New Review is Created")
+    console.log("new review saved");
+    req.flash("success", "New Review is Created");
 
-        res.redirect(`/listings/${listing._id}`);
-    })
+    res.redirect(`/listings/${listing._id}`);
+  }),
 );
 
 module.exports = router;

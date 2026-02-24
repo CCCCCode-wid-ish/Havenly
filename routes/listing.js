@@ -37,40 +37,49 @@ router.get("/new", isLoggedIn, (req, res) => {
 
 
 //Show route : read
-router.get('/:id',wrapAsync ( async (req, res) => {
-    let {id} = req.params; //extracting id 
-  const listing = await Listing.findById(id).populate("reviews");
-  if (!listing) {
-    req.flash("error", "listing requested by you doesnot existing ");
+// Show route
+router.get('/:id', wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    
+    const listing = await Listing.findById(id)   // ✅ replace your old populate with this
+        .populate({
+            path: "reviews",
+            populate: {
+                path: "author"
+            }
+        })
+        .populate("owner");
 
-    return res.redirect("/listings"); //  return prevents double response
-  }
-    res.render("listings/show" ,{listing});
-})
-)
+    if (!listing) {
+        req.flash("error", "listing requested by you does not exist");
+        return res.redirect("/listings");
+    }
+
+    console.log(listing);
+    res.render("listings/show", { listing });
+}));
 
 //Create Route 
 router.post("", validateListing,
     wrapAsync(async (req, res, next) => {
+      //✅ To validate incoming request data
 
-    //✅ To validate incoming request data
-
-//This check ensures that the client is actually 
-// sending listing data before you try to save it
-//  in MongoDB.
-    let result = listingSchema.validate(req.body);
-    //we have create the listingSchema in joi in which v have defined the constraints the
-    //req body is satisfying all the conditions are not 
-    console.log(result);
-    if (result.error) {
-        throw new ExpressError( errMsg , 400);
-    }
-        const newListing = new Listing(req.body.listing);
+      //This check ensures that the client is actually
+      // sending listing data before you try to save it
+      //  in MongoDB.
+      let result = listingSchema.validate(req.body);
+      //we have create the listingSchema in joi in which v have defined the constraints the
+      //req body is satisfying all the conditions are not
+      console.log(result);
+      if (result.error) {
+        throw new ExpressError(errMsg, 400);
+      }
+      const newListing = new Listing(req.body.listing);
+      newListing.owner = req.user._id; // ✅ ADD THIS LINE
       await newListing.save();
-      req.flash("success" , "New Listing created")
-        res.redirect("/listings");
-    
-})
+      req.flash("success", "New Listing created");
+      res.redirect("/listings");
+    })
     
 )
 
