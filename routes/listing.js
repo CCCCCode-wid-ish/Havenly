@@ -75,7 +75,7 @@ router.post("", validateListing,
         throw new ExpressError(errMsg, 400);
       }
       const newListing = new Listing(req.body.listing);
-      newListing.owner = req.user._id; // ✅ ADD THIS LINE
+      newListing.owner = req.user._id; //  ADDED THIS LINE ,CURRENT USER VALUE IS STORED
       await newListing.save();
       req.flash("success", "New Listing created");
       res.redirect("/listings");
