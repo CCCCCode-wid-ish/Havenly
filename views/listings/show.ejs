@@ -37,6 +37,7 @@
     </div>
 
     <br>
+    <% if(currUser._id.equals(listings.owner)) { %>
 
     <a href="/listings/<%= listing._id %>/edit" class="btn btn-primary">
       Edit this listing
@@ -52,9 +53,11 @@
       </button>
     </form>
 
-
+   <%} %>
 
   </div>
+
+  
   <div class = "col-8 offset-2 mt-4">
 
 
