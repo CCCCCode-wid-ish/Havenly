@@ -4,25 +4,12 @@ const wrapAsync = require("../utils/wrapAsync")
 const { listingSchema, reviewSchema } = require("../schema.js");
 const ExpressError = require("../utils/ExpressError");
 const Listing = require("../models/listing.js");
-const Review = require("../models/review.js");
+const {validateReview} = require("../middleware.js")
 const { isLoggedIn } = require("../middleware.js"); // ✅ add this
 const router = express.Router({mergeParams : true})
 
 
 
-//For review
-const validateReview = (req, res, next) => {
-  let { error } = reviewSchema.validate(req.body);
-  //ListingSchema ke uppar validate karenge req ke body
-  // from result v r getting the error
-
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError( errMsg , 400);
-  } else {
-    next();
-  }
-};
 
 
 

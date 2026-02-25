@@ -1,6 +1,7 @@
 const Listing = require("./models/listing");
 
-
+const { listingSchema ,reviewSchema} = require("./schema.js");
+const ExpressError = require("./utils/ExpressError");
 
 module.exports.isLoggedIn = (req, res, next) => {
   //console.log(req.path, "..",req.originalUrl); //path -> trying to access ,originalurl: complete url trying to access
@@ -40,8 +41,44 @@ module.exports.isOwner = async(req, res, next) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
          if (!listing.owner.equals(req.user._id)) {
-           req.flash("error", "You dont have permission to edit");
+           req.flash("error", "You are not the owner of this listing! ");
            return res.redirect(`/listings/${id}`);
-         }
+  }
+
+
+  next();
+
+
 }
+
+module.exports. validateListing = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body);
+  //LsitingSchema ke uppar validate karenge req ke body
+  // from result v r getting the error
+
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(errMsg, 400);
+  } else {
+    next();
+  }
+};
+
+//For review
+
+module.exports.validateReview = (req, res, next) => {
+  let { error } = reviewSchema.validate(req.body);
+  //ListingSchema ke uppar validate karenge req ke body
+  // from result v r getting the error
+
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError( errMsg , 400);
+  } else {
+    next();
+  }
+};
+
+  
+
 

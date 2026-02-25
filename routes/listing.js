@@ -1,25 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync")
-const { listingSchema} = require("../schema.js");
-const ExpressError = require("../utils/ExpressError");
 const Listing = require("../models/listing.js");
 const { isLoggedIn } = require("../middleware.js");
+const { isOwner , validateListing}    = require("../middleware.js")
 
 
-const validateListing = (req, res, next) => {
-  let { error } = listingSchema.validate(req.body);
-  //LsitingSchema ke uppar validate karenge req ke body
-  // from result v r getting the error
-
-  if (error) {
-    let errMsg = error.details.map((el) => el.message).join(",");
-    throw new ExpressError(errMsg, 400);
-  } else {
-    next();
-  }
-};
-  
 
 //GET : parsing the data ,Index Route 
 router.get('', async(req, res) => {
@@ -90,44 +76,55 @@ router.post("", validateListing,
     
 //Edit route
 
-router.get("/:id/edit",isLoggedIn, wrapAsync(async (req, res) => {
-    
-     let {id} = req.params; //extracting id 
-  const listing = await Listing.findById(id);
-  if (!listing) {
-    req.flash("error", "listing requested by you doesnot existing ");
+router.get(
+  "/:id/edit",
+  isLoggedIn,
+  isOwner,
+  wrapAsync(async (req, res) => {
+    let { id } = req.params; //extracting id
+    const listing = await Listing.findById(id);
+    if (!listing) {
+      req.flash("error", "listing requested by you doesnot existing ");
 
-    return res.redirect("/listings"); //  return prevents double response
-  }
-    res.render("listings/edit" , {listing})
-})
-)
+      return res.redirect("/listings"); //  return prevents double response
+    }
+    res.render("listings/edit", { listing });
+  }),
+);
 
 //Update Route
-router.put("/:id", validateListing,isLoggedIn,
-    wrapAsync(async (req, res) => {
-  const { id } = req.params;
+router.put(
+  "/:id",
+  
+  isLoggedIn,
+  isOwner,
+  validateListing,
 
-  const listing = await Listing.findById(id);
+  wrapAsync(async (req, res) => {
+    const { id } = req.params;
 
-  // If image URL is empty, keep old image
-  if (!req.body.listing.image?.url?.trim()) {
-    req.body.listing.image = listing.image;
-      }
-    
-  await Listing.findByIdAndUpdate(id, req.body.listing, {
-    runValidators: true,
-  });
-      
-      req.flash("success", "Listing is updated");
+    const listing = await Listing.findById(id);
 
-  res.redirect(`/listings/${id}`);
-})
+    // If image URL is empty, keep old image
+    if (!req.body.listing.image?.url?.trim()) {
+      req.body.listing.image = listing.image;
+    }
+
+    await Listing.findByIdAndUpdate(id, req.body.listing, {
+      runValidators: true,
+    });
+
+    req.flash("success", "Listing is updated");
+
+    res.redirect(`/listings/${id}`);
+  }),
 );
 
 // Delete Route
 router.delete(
-  "/:id",isLoggedIn,
+  "/:id",
+  isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     const { id } = req.params;
 
@@ -136,7 +133,7 @@ router.delete(
 
     req.flash("success", "Listing Deleted!");
     return res.redirect("/listings"); //return added
-  })
+  }),
 );
 
 
