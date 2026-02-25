@@ -113,7 +113,7 @@ router.put("/:id", validateListing,isLoggedIn,
   // If image URL is empty, keep old image
   if (!req.body.listing.image?.url?.trim()) {
     req.body.listing.image = listing.image;
-    }
+      }
     
   await Listing.findByIdAndUpdate(id, req.body.listing, {
     runValidators: true,
