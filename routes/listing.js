@@ -53,13 +53,13 @@ router.post("", validateListing,
       //This check ensures that the client is actually
       // sending listing data before you try to save it
       //  in MongoDB.
-      let result = listingSchema.validate(req.body);
-      //we have create the listingSchema in joi in which v have defined the constraints the
-      //req body is satisfying all the conditions are not
-      console.log(result);
-      if (result.error) {
-        throw new ExpressError(errMsg, 400);
-      }
+      // let result = listingSchema.validate(req.body);
+      // //we have create the listingSchema in joi in which v have defined the constraints the
+      // //req body is satisfying all the conditions are not
+      // console.log(result);
+      // if (result.error) {
+      //   throw new ExpressError(errMsg, 400);
+      // }
       const newListing = new Listing(req.body.listing);
       newListing.owner = req.user._id; //  ADDED THIS LINE ,CURRENT USER VALUE IS STORED
       console.log(req.user);
