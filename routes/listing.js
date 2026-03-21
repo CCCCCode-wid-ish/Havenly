@@ -10,7 +10,7 @@ const ListingController = requiring("../controllers/listings.js")
 
 
 //GET : parsing the data ,Index Route 
-router.get('',wrapAsync )
+router.get('', wrapAsync(index));
 
 
 //NEW route  
