@@ -6,6 +6,8 @@ const { isLoggedIn } = require("../middleware.js");
 const { isOwner , validateListing}    = require("../middleware.js")
 
 
+const ListingController = requiring("../controllers/listings.js")
+
 
 //GET : parsing the data ,Index Route 
 router.get('',wrapAsync )
