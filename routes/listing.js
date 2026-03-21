@@ -8,10 +8,7 @@ const { isOwner , validateListing}    = require("../middleware.js")
 
 
 //GET : parsing the data ,Index Route 
-router.get('', async(req, res) => {
-    const allListings = await Listing.find({});
-    res.render("listings/index" ,{allListings});
-})
+router.get('',wrapAsync )
 
 
 //NEW route  
