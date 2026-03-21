@@ -7,42 +7,15 @@ const passport = require("passport");
 const { saveRedirectUrl } = require("../middleware");
 
 
+const userController = require("../controllers/users")
 
-router.get("/signup", (req, res) => {
-    res.render("users/signup");
-})
+
+router.get("/signup", userController.renderSignUpForm);
 
 //Sign up from user
-router.post("/signup", async (req, res) => {
-    try {
-        //Extracting the password and body from the user
-        let { username, email, password } = req.body;
-        //Create the new user 
-        const newUser = new User({ email, username })
-        //Registering the new user
-        const registeredUser = await User.register(newUser, password);
-        console.log(registeredUser);
+router.post("/signup",wrapAsync(userController.signup) )
 
-
-        //For automatically loggedIn after sign up
-        req.login(registeredUser, (err) => {
-            if (err) {
-                return next(err);
-            }
-              req.flash("success", "Welcome to havenly");
-              res.redirect(req.session.redirectUrl); //using from middleware
-
-        })
-     
-    } catch (e) {
-        req.flash("error", e.message);
-        res.redirect("/signup");
-        
-    }
-    
-})
-
-
+ 
 
 router.get("/login", (req, res) => {
     res.render("users/login");
@@ -67,6 +40,8 @@ router.post(
 // }));
 //Used for authentication
 
+
+//logout 
 
 router.get("/logout", (req, res) => {
     req.logout((err) => {
