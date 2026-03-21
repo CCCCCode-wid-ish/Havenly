@@ -6,68 +6,28 @@ const { isLoggedIn } = require("../middleware.js");
 const { isOwner , validateListing}    = require("../middleware.js")
 
 
-const ListingController = requiring("../controllers/listings.js")
+const ListingController = require("../controllers/listings.js")
 
 
 //GET : parsing the data ,Index Route 
-router.get('', wrapAsync(index));
+router.get('', wrapAsync(ListingController.index));
 
 
 //NEW route  
-router.get("/new", isLoggedIn, (req, res) => {
-  console.log(req.user)
-  res.render("listings/new")
-
-})
+router.get("/new", isLoggedIn ,ListingController.renderNewForm);
 
 
 //Show route : read
 // Show route
-router.get('/:id', wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    
-    const listing = await Listing.findById(id)   // ✅ replace your old populate with this
-        .populate({
-            path: "reviews",
-            populate: {
-                path: "author"
-            }
-        })
-        .populate("owner");
-
-    if (!listing) {
-        req.flash("error", "listing requested by you does not exist");
-        return res.redirect("/listings");
-    }
-
-    console.log(listing);
-    res.render("listings/show", { listing });
-}));
+router.get('/:id', wrapAsync(ListingController.showListings));
 
 //Create Route 
 router.post("", validateListing,
-    wrapAsync(async (req, res, next) => {
-      //✅ To validate incoming request data
-
-      //This check ensures that the client is actually
-      // sending listing data before you try to save it
-      //  in MongoDB.
-      // let result = listingSchema.validate(req.body);
-      // //we have create the listingSchema in joi in which v have defined the constraints the
-      // //req body is satisfying all the conditions are not
-      // console.log(result);
-      // if (result.error) {
-      //   throw new ExpressError(errMsg, 400);
-      // }
-      const newListing = new Listing(req.body.listing);
-      newListing.owner = req.user._id; //  ADDED THIS LINE ,CURRENT USER VALUE IS STORED
-      console.log(req.user);
-      await newListing.save();
-      req.flash("success", "New Listing created");
-      res.redirect("/listings");
-    })
+    wrapAsync(ListingController.createListing)
+     
+     )
     
-)
+
 
 
 
@@ -79,16 +39,7 @@ router.get(
   "/:id/edit",
   isLoggedIn,
   isOwner,
-  wrapAsync(async (req, res) => {
-    let { id } = req.params; //extracting id
-    const listing = await Listing.findById(id);
-    if (!listing) {
-      req.flash("error", "listing requested by you doesnot existing ");
-
-      return res.redirect("/listings"); //  return prevents double response
-    }
-    res.render("listings/edit", { listing });
-  }),
+  wrapAsync(ListingController.renderEditForm)
 );
 
 //Update Route
@@ -97,43 +48,13 @@ router.put(
   
   isLoggedIn,
   isOwner,
-  validateListing,
+  validateListing, // the listing which we are trying to create is valid or not 
 
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-
-    const listing = await Listing.findById(id);
-
-    // If image URL is empty, keep old image
-    if (!req.body.listing.image?.url?.trim()) {
-      req.body.listing.image = listing.image;
-    }
-
-    await Listing.findByIdAndUpdate(id, req.body.listing, {
-      runValidators: true,
-    });
-
-    req.flash("success", "Listing is updated");
-
-    res.redirect(`/listings/${id}`);
-  }),
+  wrapAsync(ListingController.updateListing),
 );
 
-// Delete Route
-router.delete(
-  "/:id",
-  isLoggedIn,
-  isOwner,
-  wrapAsync(async (req, res) => {
-    const { id } = req.params;
-
-    const deletedListing = await Listing.findByIdAndDelete(id);
-    console.log(deletedListing);
-
-    req.flash("success", "Listing Deleted!");
-    return res.redirect("/listings"); //return added
-  }),
-);
+// Delete Route or destroy listing 
+router.delete("/:id", isLoggedIn, isOwner, wrapAsync(ListingController.destroyListings));
 
 
 
