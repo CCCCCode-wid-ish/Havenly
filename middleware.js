@@ -1,5 +1,5 @@
 const Listing = require("./models/listing");
-
+const Review = require("./models/review");
 const { listingSchema ,reviewSchema} = require("./schema.js");
 const ExpressError = require("./utils/ExpressError");
 
@@ -32,11 +32,11 @@ module.exports.saveRedirectUrl = (req, res, next) => {
     res.locals.redirectUrl = req.session.redirectUrl;
   }
   next();
-}
+};
 
 
 
-// ✅ Fixed isOwner
+//  Fixed isOwner
  module.exports.isOwner = async(req, res, next) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);

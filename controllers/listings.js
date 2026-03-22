@@ -16,7 +16,7 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 
-module.exports.showListings = (async (req, res) => {
+module.exports.showListing = (async (req, res) => {
     let { id } = req.params;
     
     const listing = await Listing.findById(id)   // ✅ replace your old populate with this
