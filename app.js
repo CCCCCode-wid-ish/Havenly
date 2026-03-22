@@ -1,3 +1,16 @@
+
+if (process.env_NODE_ENV != "production ") { //
+  //we are  in development phase : we are making the project 
+  //we are using .env file only in the production phase 
+  
+  //production phase : deployment of the project 
+  require('dotenv').config() // or import 'dotenv/config' if you're using ES6
+}
+
+
+console.log(process.env.SECRET) // remove this after you've confirmed it is working
+//accessing the secret from env file 
+
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
