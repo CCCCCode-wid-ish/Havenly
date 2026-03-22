@@ -9,47 +9,24 @@ const { saveRedirectUrl } = require("../middleware");
 
 const userController = require("../controllers/users")
 
-
+//rendering the signup form 
 router.get("/signup", userController.renderSignUpForm);
 
 //Sign up from user
-router.post("/signup",wrapAsync(userController.signup) )
+router.post("/signup", wrapAsync(userController.userSignUp));
 
  
-
-router.get("/login", (req, res) => {
-    res.render("users/login");
-})
+//login form 
+router.get("/login", userController.renderLoginForm);
 
 // ✅ Correct - add successRedirect inside passport.authenticate
-router.post(
-  "/login",
-  saveRedirectUrl,
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureFlash: true,
-  }),
-  async (req, res) => {
-      req.flash("success", "Welcome to WanderLust! You are logged in!");
-      let redirectUrl = res.locals.redirectUrl || "/listings";
-    res.redirect(redirectUrl); // ✅ fallback route
-  },
-);
+router.get("/signup", userController.renderSignUpForm);
 //     successRedirect: '/listings',  // ✅ handle redirect here
 //     successFlash: "Welcome to WanderLust! You are logged in!" // ✅ flash here
 // }));
-//Used for authentication
-
+ //Used for authentication
 
 //logout 
+router.get("/logout", userController.logout);
 
-router.get("/logout", (req, res) => {
-    req.logout((err) => {
-        if (err) {
-           return next(err);
-        }
-        req.flash("success", "you are logged out");
-        res.redirect("/listings");
-    })
-})
 module.exports = router;
