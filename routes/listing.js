@@ -80,16 +80,24 @@ const wrapAsync = require("../utils/wrapAsync");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const ListingController = require("../controllers/listings.js");
 
+
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 // --- 1. Index and Create ---
 router
   .route("/")
   .get(wrapAsync(ListingController.index))
-  .post(
-    isLoggedIn,
-    validateListing,
-    wrapAsync(ListingController.createListing),
-  );
+  // .post(
+  //   isLoggedIn,
+  //   validateListing,
+  //   wrapAsync(ListingController.createListing),
+  // );
 
+
+  .post((res, req) => {
+    res.sessionID(req.body);
+  })
 // --- 2. NEW ROUTE (Must come BEFORE /:id) ---
 // If this is below /:id, Express will think "new" is an "id"
 router.get("/new", isLoggedIn, ListingController.renderNewForm);
