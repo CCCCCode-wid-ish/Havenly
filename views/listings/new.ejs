@@ -33,20 +33,25 @@
           </div>
     </div>
 
-    <div class="mb-3">
+    <!-- <div class="mb-3">
       <label class="form-label">Image Link</label>
       <input
   name="listing[image][url]"
   placeholder="enter image URL/link"
   type="text"
   class="form-control">
-<input type="hidden" name="listing[image][filename]" value="listingimage">
-    </div>
+ <input type="hidden" name="listing[image][filename]" value="listingimage">
+    </div> --> 
 <div>
-  <div class = "mb-3">
-    <label for="image" class="form-label">Upload List Image </label>
-    <input type="file" class="form-control" />
-  </div>
+<div class="mb-3">
+  <label for="image" class="form-label">Upload Listing Image</label>
+  <input
+    type="file"
+    name="listing[image]"
+    class="form-control"
+    required
+  >
+</div>
 
 </div>
     <div class="mb-3">

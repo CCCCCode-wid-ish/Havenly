@@ -79,10 +79,21 @@ const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const ListingController = require("../controllers/listings.js");
-
+const path = require("path");
 
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+
 
 // --- 1. Index and Create ---
 router
@@ -94,10 +105,10 @@ router
   //   wrapAsync(ListingController.createListing),
   // );
 
-
-  .post((res, req) => {
-    res.sessionID(req.body);
-  })
+  .post(upload.single("listing[image]"), (req, res) => {
+   res.send(req.file);
+    
+  });
 // --- 2. NEW ROUTE (Must come BEFORE /:id) ---
 // If this is below /:id, Express will think "new" is an "id"
 router.get("/new", isLoggedIn, ListingController.renderNewForm);
