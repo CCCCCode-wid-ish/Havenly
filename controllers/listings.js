@@ -93,6 +93,7 @@
 // };
 
 const Listing = require("../models/listing");
+const { listingSchema } = require("../schema");
 
 // INDEX
 module.exports.index = async (req, res) => {
@@ -101,7 +102,16 @@ module.exports.index = async (req, res) => {
 };
 
 // NEW FORM
-module.exports.renderNewForm = (req, res) => {
+module.exports.renderNewForm = async(req, res) => {
+  let { id } = req.params;
+  const listing = await Listing.findBy(id);
+  if (!listing) {
+    req.flash("error", "Listing you requested for doesnot exist!")
+    res.redirect("/listings");
+  }
+  let originalImageUrl = listing.image.url;
+  originalImageUrl.replace("/uploads" , "/uploads/h_300,w_250");
+  
   res.render("listings/new");
 };
 
