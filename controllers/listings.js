@@ -172,6 +172,7 @@ module.exports.updateListing = async (req, res) => {
   });
 
   if (req.file) {
+    // save new image details
     listing.image = {
       url: req.file.path,
       filename: req.file.filename,
