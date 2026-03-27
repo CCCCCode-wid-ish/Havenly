@@ -1,9 +1,65 @@
 <% layout('/layouts/boilerplate') -%>
 <!--Printing the flash mesage in index.js-->
+<style>
+#filters {
+  display: flex;
+  flex-wrap: wrap;       /* Allows wrapping on very small screens */
+  align-items: center;   /* Aligns items vertically */
+}
+/* Added styling for individual items so they look nice next to each other */
+.filter {
+  text-align: center;
+  margin-right: 2rem;
+  margin-top: 1rem;
+  opacity: 0.7;
+}
+.filter:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+.filter p{
+  font-size: 0.8rem;
 
-<h3 class="mb-4">All Listings</h3>
+}
+</style>
+<!-- <h3 class="mb-4">All Listings</h3> -->
+<div id="filters">
+  <!-- 1st Item (Trending) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-fire"></i></div>
+    <p>Trending</p>
+  </div>
+  
+  <!-- 2nd Item (Rooms) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-bed"></i></div>
+    <p>Rooms</p>
+  </div>
 
-<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+
+<!-- 3rd Item (Iconic cities ) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-mountain"></i></i></div>
+    <p>Iconic cities</p>
+  </div>
+  
+
+  <!-- 4th Item (Iconic cities ) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-dungeon"></i></i></i></div>
+    <p>Iconic cities</p>
+  </div>
+  
+   <!-- 5th Item (Pools ) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-person-swimming"></i></i></i></i></div>
+    <p>Pools</p>
+  </div>
+  
+  
+  </div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-3">
   <% for (let listing of allListings) { %>
 
     <div class="col">
