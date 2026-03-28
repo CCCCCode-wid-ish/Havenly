@@ -21,6 +21,11 @@
   font-size: 0.8rem;
 
 }
+
+.tax-info{
+  display:none;
+
+}
 </style>
 <!-- <h3 class="mb-4">All Listings</h3> -->
 <div id="filters">
@@ -55,8 +60,34 @@
     <div><i class="fa-solid fa-person-swimming"></i></i></i></i></div>
     <p>Pools</p>
   </div>
+
+
+  <!-- 6th Item (Pools ) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-building-wheat"></i></i></i></i></i></div>
+    <p>Desserts</p>
+  </div>
   
+  <!-- 7th Item (Seeding ) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-seedling"></i></i></i></i></i></div>
+    <p>Pools</p>
+  </div>
   
+  <!-- 5th Item (Artic ) -->
+  <div class="filter">
+    <div><i class="fa-solid fa-tractor"></i></i></i></i></i></div>
+    <p>Artic</p>
+  </div>
+  
+  <div class = "tax-toggle">
+    <div class="form-check-reverse form-switch">
+  <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+  <label class="form-check-label" for="switchCheckDefault">
+    Display total after taxes
+  </label>
+</div>
+  </div>
   </div>
 
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-3">
@@ -78,6 +109,8 @@
 
             <p class="card-text">
               ₹ <%= Number(listing.price || 0).toLocaleString("en-IN") %> / night
+              <i class = "tax-info"> &nbsp; &nbsp;+18% GST</i>
+
             </p>
 
             <button class="btn btn-primary">Go somewhere</button>
@@ -89,3 +122,20 @@
 
   <% } %>
 </div>
+
+<script>
+  let taxSwitch = document.getElementById("switchCheckDefault")
+  taxSwitch.addEventListener("click", ()=> {
+    let taxInfo = document.getElementsByClassName("tax-info");
+    for(info of taxInfo){
+      if(info.style.display != "inline"){
+        info.style.display = "inline";
+      }else{
+        info.style.display = "none";
+      }
+      
+    }
+    console.log("Tax-Info");
+
+  })
+</script>
