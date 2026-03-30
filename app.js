@@ -24,10 +24,12 @@ const ExpressError = require("./utils/ExpressError");
 
 const session = require("express-session");
 
+const MongoStore = require("connect-mongo").default;
+
+
 const listingRouter = require("./routes/listing");
 const reviewRouter = require("./routes/reviews");
 const flash = require("connect-flash");
-
 
 //Passport
 
@@ -63,8 +65,22 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  // crypto: {
+  //   secret: mySecretKey,
+  // },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", () => {
+  console.log("ERROR in MONGO SESSION STORE")
+})
+
 const sessionOptions = {
-  secret: "mySecretKey",
+  store,
+  // secret: "mySecretKey",
   resave: false,
   saveUninitialized: true,
 
@@ -79,6 +95,9 @@ const sessionOptions = {
 // app.get("/", (req, res) => {
 //   res.send("hi i am root");
 // });
+
+
+
 
 // session FIRST
 app.use(session(sessionOptions));
@@ -154,18 +173,7 @@ app.use((err, req, res, next) => {
   // res.status(statusCode).send(message);
   res.status(statusCode).render("error", { message });
 });
-// GLOBAL ERROR HANDLER (FIXED)
-// ======================
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message = "Something went wrong" } = err;
 
-  // 🔥 PREVENTS HEADERS ERROR
-  if (res.headersSent) {
-    return next(err);
-  }
-
-  res.status(statusCode).render("error", { message });
-});
 
 app.listen(port, () => {
   console.log("Server is listening to the port");
