@@ -69,7 +69,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   // crypto: {
-  //   secret: mySecretKey,
+  //   secret: process.env.SECRET,
   // },
   touchAfter: 24 * 3600,
 });
@@ -80,7 +80,7 @@ store.on("error", () => {
 
 const sessionOptions = {
   store,
-  // secret: "mySecretKey",
+  secret: process.env.SECRET || "mysupersecretcode",
   resave: false,
   saveUninitialized: true,
 
@@ -167,13 +167,22 @@ app.use((req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });
 
-//Middleware
+// GLOBAL ERROR HANDLER (FIXED)
+// ======================
 app.use((err, req, res, next) => {
-  let { statusCode = 500, message = "Something went wrong " } = err;
-  // res.status(statusCode).send(message);
+  const { statusCode = 500, message = "Something went wrong" } = err;
+
+  res.locals.success = res.locals.success || "";
+  res.locals.error = res.locals.error || "";
+  res.locals.currUser = res.locals.currUser || req.user || null;
+
+  // 🔥 PREVENTS HEADERS ERROR
+  if (res.headersSent) {
+    return next(err);
+  }
+
   res.status(statusCode).render("error", { message });
 });
-
 
 app.listen(port, () => {
   console.log("Server is listening to the port");
